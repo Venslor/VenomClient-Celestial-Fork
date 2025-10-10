@@ -38,8 +38,8 @@ dependencies {
     implementation("org.apache.logging.log4j:log4j-api:2.24.3")
     implementation("org.apache.logging.log4j:log4j-core:2.24.3")
 
-    implementation("com.squareup.okhttp3:okhttp:4.12.0")
-    implementation("com.squareup.okhttp3:okhttp-dnsoverhttps:4.12.0")
+    implementation("com.squareup.okhttp3:okhttp:5.2.1")
+    implementation("com.squareup.okhttp3:okhttp-dnsoverhttps:5.2.1")
     implementation("com.google.code.gson:gson:2.13.1")
     implementation("com.formdev:flatlaf:3.6")
     implementation("commons-io:commons-io:2.19.0")
