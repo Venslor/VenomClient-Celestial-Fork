@@ -4,7 +4,7 @@ import java.util.*
 plugins {
     application
     kotlin("jvm")
-    kotlin("plugin.serialization") version "2.1.20"
+    kotlin("plugin.serialization") version "2.2.21"
     id("com.github.johnrengelman.shadow") version "8.+"
     id ("com.gorylenko.gradle-git-properties") version "2.4.1"
     id("com.google.protobuf") version "0.9.5"
