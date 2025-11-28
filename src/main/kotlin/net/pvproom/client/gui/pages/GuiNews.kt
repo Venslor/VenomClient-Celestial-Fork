@@ -10,8 +10,7 @@ import net.pvproom.client.gui.LauncherAlert
 import net.pvproom.client.gui.LauncherBirthday
 import net.pvproom.client.gui.LauncherNews
 import net.pvproom.client.metadata
-import net.pvproom.client.toJLabel
-import net.pvproom.client.utils.lunar.Blogpost
+import net.pvproom.client.utils.lunar.LauncherBlogpost
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.awt.*
@@ -24,7 +23,7 @@ import javax.swing.border.*
 import kotlin.math.abs
 
 class GuiNews : JScrollPane(panel, VERTICAL_SCROLLBAR_AS_NEEDED, HORIZONTAL_SCROLLBAR_NEVER) {
-    private lateinit var blogPosts: List<Blogpost>
+    private lateinit var blogPosts: List<LauncherBlogpost>
 
     init {
         EventManager.register(this)

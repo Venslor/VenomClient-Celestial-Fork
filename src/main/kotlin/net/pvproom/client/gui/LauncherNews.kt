@@ -4,7 +4,7 @@ import cn.hutool.crypto.SecureUtil
 import net.pvproom.client.*
 import net.pvproom.client.files.DownloadManager.cacheDir
 import net.pvproom.client.utils.lunar.Alert
-import net.pvproom.client.utils.lunar.Blogpost
+import net.pvproom.client.utils.lunar.LauncherBlogpost
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.awt.Color
@@ -17,7 +17,7 @@ import javax.swing.border.TitledBorder
 
 private val log: Logger = LoggerFactory.getLogger(LauncherNews::class.java)
 
-class LauncherNews(private val blogPost: Blogpost) : JPanel() {
+class LauncherNews(private val blogPost: LauncherBlogpost) : JPanel() {
     private val image = File(cacheDir, "news/" + SecureUtil.sha1(blogPost.title))
 
     init {
@@ -58,8 +58,8 @@ class LauncherNews(private val blogPost: Blogpost) : JPanel() {
         val button = JButton(text)
         button.addActionListener {
             when (blogPost.type) {
-                Blogpost.ButtonType.OPEN_LINK -> blogPost.link.toURI().open()
-                Blogpost.ButtonType.CHANGE_API -> {
+                LauncherBlogpost.ButtonType.OPEN_LINK -> blogPost.link.toURI().open()
+                LauncherBlogpost.ButtonType.CHANGE_API -> {
                     if (JOptionPane.showConfirmDialog(
                             this,
                             f.getString("gui.news.api.confirm").format(blogPost.link),

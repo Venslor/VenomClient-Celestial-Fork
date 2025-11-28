@@ -2,6 +2,7 @@ package net.pvproom.client.utils.lunar
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonArray
 import net.pvproom.client.JSON
 import net.pvproom.client.config
 import net.pvproom.client.event.impl.CrashReportUploadEvent
@@ -13,6 +14,7 @@ import net.pvproom.client.utils.OSEnum
 import net.pvproom.client.utils.RequestUtils.get
 import net.pvproom.client.utils.RequestUtils.post
 import net.pvproom.client.utils.arch
+import okhttp3.coroutines.executeAsync
 import java.net.URI
 import java.net.URL
 import java.util.*
@@ -34,17 +36,31 @@ class LauncherData(val api: URI = URI.create("https://api.lunarclientprod.com"))
      * @return Launcher Metadata
      */
 
-    fun metadata(): LauncherMetadata {
+    suspend fun metadata(): LauncherMetadata {
         // do request with fake system info
         // DO NOT REPLACE THE launcher_version FIELD TO config.api.versionSpoof
-        get("$api/launcher/metadata?installation_id=${UUID.randomUUID()}&os=${OSEnum.current!!.jsName}&arch=${arch}&launcher_version=114.514.191&branch=master&branch_changed=true&private=true&os_release=114.514").execute()
+        val versions = get("$api/launcher/metadata/versions/lunar?installation_id=${UUID.randomUUID()}&os=${OSEnum.current!!.jsName}&arch=${arch}&launcher_version=114.514.191&branch=master&branch_changed=true&private=true&os_release=114.514")
+            .executeAsync()
             .use { response ->
                 assert(response.code == 200) {
                     "Code = " + response.code
                 }
-                assert(response.body != null) { "ResponseBody was null" }
-                return JSON.decodeFromString(response.string!!)
+                JSON.decodeFromString<AvailableLunarVersions>(response.body.string())
             }
+
+        // fetch blogposts
+        val layout = get("$api/launcher/metadata/layout?installation_id=${UUID.randomUUID()}&os=${OSEnum.current!!.jsName}&arch=${arch}&launcher_version=114.514.191&branch=master&branch_changed=true&private=true&os_release=114.514")
+            .executeAsync()
+            .use { response ->
+                assert(response.code == 200) {
+                    "Code = " + response.code
+                }
+                val string = response.body.string()
+                println(string)
+                JSON.decodeFromString<LunarLauncherLayout>(string)
+            }
+
+        return LauncherMetadata(versions.versions, layout.blogPosts, layout.alert)
     }
 
 
@@ -330,7 +346,7 @@ data class LunarModule(
 )
 
 @Serializable
-data class Blogpost(
+data class LauncherBlogpost(
     val title: String,
     val excerpt: String? = null, // only available on LCCN API
     val image: String,
@@ -357,9 +373,23 @@ data class Alert(
 data class LauncherMetadata(
     val versions: List<LunarVersion>,
     @SerialName("blogPosts")
-    val blogposts: List<Blogpost> = emptyList(),
+    val blogposts: List<LauncherBlogpost> = emptyList(),
     val alert: Alert? = null
 )
+
+@Serializable
+data class AvailableLunarVersions(
+    val versions: List<LunarVersion>,
+    val branchReset: Boolean,
+    val recommendedLibraries: JsonArray, // for now Celestial doesn't need to support it
+)
+
+@Serializable
+data class LunarLauncherLayout(
+    val alert: Alert? = null,
+    val blogPosts: List<LauncherBlogpost>
+)
+
 
 @Serializable
 data class PluginInfo(

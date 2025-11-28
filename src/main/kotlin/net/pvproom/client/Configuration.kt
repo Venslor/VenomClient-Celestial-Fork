@@ -90,6 +90,7 @@ data class AddonConfiguration(
 @Serializable
 data class BasicConfig(
     var api: APIConfig = APIConfig(),
+    var openDiscord: Boolean = true,
     var jre: String = "", // // leave empty if you want to use the default one
     var language: Language = getLanguage(),
     var theme: String = "dark",

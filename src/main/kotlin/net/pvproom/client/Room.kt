@@ -102,7 +102,7 @@ val minecraftFolder: File
         return File(System.getProperty("user.home"), ".minecraft")
     }
 
-fun main() {
+suspend fun main() {
     // set encoding
     System.setProperty("file.encoding", "UTF-8")
     log.info("Venom v${GitUtils.buildVersion} build by ${GitUtils.buildUser}")
@@ -136,7 +136,7 @@ fun main() {
     }
 }
 
-private fun run() {
+private suspend fun run() {
     // init config
     initConfig()
     initTheme() // init theme
@@ -187,7 +187,9 @@ private fun run() {
     runningOnGui = true
     APIReadyEvent().call()
 
-    openDiscordInvite("https://discord.gg/ny4a9B9bbn")
+    if (config.openDiscord) {
+        openDiscordInvite("https://discord.gg/ny4a9B9bbn")
+    }
 
     launcherFrame.addWindowListener(object : WindowAdapter() {
         override fun windowClosing(e: WindowEvent) {
@@ -297,7 +299,7 @@ private fun checkJava() {
     }
 }
 
-private fun initLauncher() {
+private suspend fun initLauncher() {
     metadata = launcherData.metadata()
     minecraftManifest = MinecraftData.manifest()
 }

@@ -2,6 +2,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 plugins {
+    application
     kotlin("jvm")
     kotlin("plugin.serialization") version "2.1.20"
     id("com.github.johnrengelman.shadow") version "8.+"
@@ -21,8 +22,8 @@ if (isGitHubActions) {
 
 tasks.withType<JavaCompile> {
     options.encoding = "UTF-8"
-    java.sourceCompatibility = JavaVersion.VERSION_21
-    java.targetCompatibility = JavaVersion.VERSION_21
+//    java.sourceCompatibility = JavaVersion.VERSION_17
+//    java.targetCompatibility = JavaVersion.VERSION_17
 }
 
 
@@ -33,13 +34,15 @@ repositories {
 }
 
 dependencies {
+    implementation("com.auth0:java-jwt:4.5.0")
     implementation("org.slf4j:slf4j-api:2.0.17")
     implementation("org.slf4j:slf4j-log4j12:2.0.17")
     implementation("org.apache.logging.log4j:log4j-api:2.24.3")
     implementation("org.apache.logging.log4j:log4j-core:2.24.3")
 
-    implementation("com.squareup.okhttp3:okhttp:4.12.0")
-    implementation("com.squareup.okhttp3:okhttp-dnsoverhttps:4.12.0")
+    implementation("com.squareup.okhttp3:okhttp-coroutines:5.1.0")
+    implementation("com.squareup.okhttp3:okhttp:5.1.0")
+    implementation("com.squareup.okhttp3:okhttp-dnsoverhttps:5.1.0")
     implementation("com.google.code.gson:gson:2.13.1")
     implementation("com.formdev:flatlaf:3.6")
     implementation("commons-io:commons-io:2.19.0")
@@ -47,6 +50,7 @@ dependencies {
     implementation("org.java-websocket:Java-WebSocket:1.6.0")
     implementation("com.google.protobuf:protobuf-kotlin:4.30.2")
 
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.1")
 }
@@ -69,6 +73,10 @@ protobuf {
     protoc {
         artifact = "com.google.protobuf:protoc:4.30.2"
     }
+}
+
+application {
+    mainClass = "net.pvproom.client.RoomKt"
 }
 
 tasks.jar {

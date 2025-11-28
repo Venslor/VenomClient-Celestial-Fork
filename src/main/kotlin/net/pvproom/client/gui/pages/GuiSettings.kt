@@ -88,7 +88,7 @@ class GuiSettings : JScrollPane(panel, VERTICAL_SCROLLBAR_AS_NEEDED, HORIZONTAL_
      * Hot reload config when API address changes.
      */
     @EventTarget
-    fun onChangeConfig(e: ChangeConfigEvent<*>) {
+    suspend fun onChangeConfig(e: ChangeConfigEvent<*>) {
         if (e.configObject is APIConfig && e.key == "address") {
             log.info("API changed, hot reloading...")
 
@@ -283,6 +283,11 @@ class GuiSettings : JScrollPane(panel, VERTICAL_SCROLLBAR_AS_NEEDED, HORIZONTAL_
             { config.game.gameDir = it },
             "gui.settings.game-dir.success"
         ))
+
+        add(createPanel {
+            add(JLabel("Discord’u başlangıçta aç"))
+            add(getAutoSaveCheckBox(config.openDiscord, "openDiscordOnStart", "Aç"))
+        })
 
         //add(createAddonLoadersPanel())
     }
